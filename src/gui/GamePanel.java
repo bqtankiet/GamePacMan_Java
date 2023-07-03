@@ -84,6 +84,7 @@ public class GamePanel extends JPanel {
 		game.pacman.draw(g);
 		game.ghost.update();
 		game.ghost.draw(g);
+		game.ghost.drawPath(g);
 	}
 
 }

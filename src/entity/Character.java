@@ -19,7 +19,7 @@ public abstract class Character {
 		this.color = color;
 	}
 
-	private void move(int direction) {
+	public void move(int direction) {
 		switch (direction) {
 		case GameConstant.UP -> {
 			y -= speed;
@@ -36,7 +36,7 @@ public abstract class Character {
 		}
 	}
 
-	private boolean canMove(int direction) {
+	public boolean canMove(int direction) {
 		int newX = x, newY = y;
 		switch (direction) {
 		case GameConstant.UP -> {
@@ -50,6 +50,9 @@ public abstract class Character {
 		}
 		case GameConstant.RIGHT -> {
 			newX += speed;
+		}
+		default -> {
+			return false;
 		}
 		}
 		int[][] map = game.map;
@@ -70,31 +73,35 @@ public abstract class Character {
 		} catch (ArrayIndexOutOfBoundsException e) {
 			move(direction);
 			if (canTeleport()) {
-				switch (direction) {
-				case GameConstant.UP -> {
-					y = game.map.length * GameConstant.SQUARE;
-				}
-				case GameConstant.DOWN -> {
-					y = -1 * GameConstant.SQUARE;
-				}
-				case GameConstant.LEFT -> {
-					x = game.map[0].length * 20;
-				}
-				case GameConstant.RIGHT -> {
-					x = -1 * GameConstant.SQUARE;
-				}
-				}
+				teleport(direction);
 			}
 		}
 	}
 
-	private boolean canTeleport() {
+	public boolean canTeleport() {
 		int top = y / size;
 		int bottom = (y + size - 1) / size;
 		int right = (x + size - 1) / size;
 		int left = (x) / size;
 		return ((left < 0 || left >= game.map[0].length) && (right < 0 || right >= game.map[0].length)
 				|| (top < 0 || top >= game.map[0].length) && (bottom < 0 || bottom >= game.map[0].length));
+	}
+
+	public void teleport(int direction) {
+		switch (direction) {
+		case GameConstant.UP -> {
+			y = game.map.length * GameConstant.SQUARE;
+		}
+		case GameConstant.DOWN -> {
+			y = -1 * GameConstant.SQUARE;
+		}
+		case GameConstant.LEFT -> {
+			x = game.map[0].length * 20;
+		}
+		case GameConstant.RIGHT -> {
+			x = -1 * GameConstant.SQUARE;
+		}
+		}
 	}
 
 	public void draw(Graphics g) {
