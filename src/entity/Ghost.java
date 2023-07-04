@@ -9,15 +9,13 @@ import algorithm.AStarPathfinding.Node;
 import game.Game;
 import game.GameConstant;
 
-public class Ghost extends Character {
+public abstract class Ghost extends Character {
 
 	AStarPathfinding pathfinder;
 	List<Node> path;
 
-	public Ghost(Game game) {
-		super(game, Color.red);
-		x = 240;
-		y = 280;
+	public Ghost(Game game, Color color) {
+		super(game, color);
 		size = GameConstant.SQUARE;
 		speed = 2;
 		pathfinder = new AStarPathfinding();
@@ -25,9 +23,8 @@ public class Ghost extends Character {
 
 	@Override
 	public void update() {
-//		super.update();
-//		scatterMode();
-		chaseMode();
+//		chaseMode();
+		scatterMode();
 	}
 
 	public void drawPath(Graphics g) {
@@ -37,11 +34,13 @@ public class Ghost extends Character {
 //		}
 	}
 
-	public void chaseMode() {
-		path = pathfinder.findPath(game.map, y / size, x / size, game.pacman.y / size, game.pacman.x / size);
+	public abstract void chaseMode();
+
+	public void moveTo(int x, int y) {
+		path = pathfinder.findPath(game.map, this.y / size, this.x / size, y / size, x / size);
 		if (!path.isEmpty()) {
-			int xDir = path.get(0).col * size - x;
-			int yDir = path.get(0).row * size - y;
+			int xDir = path.get(0).col * size - this.x;
+			int yDir = path.get(0).row * size - this.y;
 
 			if (xDir > 0) {
 				nextDirection = GameConstant.RIGHT;
@@ -56,25 +55,9 @@ public class Ghost extends Character {
 		super.update();
 	}
 
-	public void scatterMode() {
-			path = pathfinder.findPath(game.map, y / size, x / size, 28, 1);
-		if (!path.isEmpty()) {
-			int xDir = path.get(0).col * size - x;
-			int yDir = path.get(0).row * size - y;
+	int step = 0;
 
-			if (xDir > 0) {
-				nextDirection = GameConstant.RIGHT;
-			} else if (xDir < 0) {
-				nextDirection = GameConstant.LEFT;
-			} else if (yDir > 0) {
-				nextDirection = GameConstant.DOWN;
-			} else if (yDir < 0) {
-				nextDirection = GameConstant.UP;
-			}
-		}
-		super.update();
-
-	}
+	public abstract void scatterMode();
 
 	private int getRandomDirection() {
 		int randomDirection = -1;

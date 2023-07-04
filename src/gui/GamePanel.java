@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.JPanel;
 
@@ -58,6 +59,12 @@ public class GamePanel extends JPanel {
 				}
 			}
 		});
+		addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				System.out.println("x = "+e.getX()/GameConstant.SQUARE+ ", y = "+e.getY()/GameConstant.SQUARE);
+			}
+		});
 		addKeyListener(new KeyBoardInput(game));
 		setFocusable(true);
 	}
@@ -82,9 +89,14 @@ public class GamePanel extends JPanel {
 		
 		game.pacman.update();
 		game.pacman.draw(g);
-		game.ghost.update();
-		game.ghost.draw(g);
-		game.ghost.drawPath(g);
+		game.redGhost.update();
+		game.redGhost.draw(g);
+		game.orangeGhost.update();
+		game.orangeGhost.draw(g);
+		game.blueGhost.update();
+		game.blueGhost.draw(g);
+		game.pinkGhost.update();
+		game.pinkGhost.draw(g);
 	}
 
 }
