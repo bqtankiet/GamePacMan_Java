@@ -1,20 +1,27 @@
 package game;
 
+import entity.BlueGhost;
 import entity.Ghost;
+import entity.OrangeGhost;
 import entity.PacMan;
+import entity.PinkGhost;
+import entity.RedGhost;
 import gui.GameFrame;
 import gui.GamePanel;
 
 public class Game {
 	public PacMan pacman;
-	public Ghost ghost;
+	public Ghost redGhost,orangeGhost,blueGhost,pinkGhost;
 	public GamePanel gamePanel;
 	public int[][] map = new int[30][30];
 
 	public Game() {
 		initMap();
 		pacman = new PacMan(this);
-		ghost = new Ghost(this);
+		redGhost = new RedGhost(this);
+		orangeGhost = new OrangeGhost(this);
+		blueGhost = new BlueGhost(this);
+		pinkGhost = new PinkGhost(this);
 	}
 
 	public void initMap() {
