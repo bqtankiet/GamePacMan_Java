@@ -3,6 +3,7 @@ package entity;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
+import java.util.Random;
 
 import algorithm.AStarPathfinding;
 import algorithm.AStarPathfinding.Node;
@@ -13,18 +14,16 @@ public abstract class Ghost extends Character {
 
 	AStarPathfinding pathfinder;
 	List<Node> path;
+	int mode;
+	int targetX, targetY;
 
 	public Ghost(Game game, Color color) {
 		super(game, color);
 		size = GameConstant.SQUARE;
 		speed = 2;
 		pathfinder = new AStarPathfinding();
-	}
-
-	@Override
-	public void update() {
-//		chaseMode();
-		scatterMode();
+		targetX = this.x;
+		targetY = this.y;
 	}
 
 	public void drawPath(Graphics g) {
@@ -34,21 +33,21 @@ public abstract class Ghost extends Character {
 //		}
 	}
 
-	public abstract void chaseMode();
-
 	public void moveTo(int x, int y) {
 		path = pathfinder.findPath(game.map, this.y / size, this.x / size, y / size, x / size);
 		if (!path.isEmpty()) {
-			int xDir = path.get(0).col * size - this.x;
-			int yDir = path.get(0).row * size - this.y;
+			int pathX = path.get(0).col * size;
+			int pathY = path.get(0).row * size;
+			int xDir = pathX - this.x;
+			int yDir = pathY - this.y;
 
-			if (xDir > 0) {
+			if (xDir > 0 && this.y == pathY) {
 				nextDirection = GameConstant.RIGHT;
-			} else if (xDir < 0) {
+			} else if (xDir < 0 && this.y == pathY) {
 				nextDirection = GameConstant.LEFT;
-			} else if (yDir > 0) {
+			} else if (yDir > 0 && this.x == pathX) {
 				nextDirection = GameConstant.DOWN;
-			} else if (yDir < 0) {
+			} else if (yDir < 0 && this.x == pathX) {
 				nextDirection = GameConstant.UP;
 			}
 		}
@@ -57,24 +56,42 @@ public abstract class Ghost extends Character {
 
 	int step = 0;
 
+	public abstract void chaseMode();
+
 	public abstract void scatterMode();
 
-	private int getRandomDirection() {
-		int randomDirection = -1;
-		int randomNumber = (int) (Math.random() * 100);
-		if (randomNumber >= 0 && randomNumber < 25) {
-			randomDirection = GameConstant.UP;
+	public int[] getRandomPosition() {
+		int randX = 0;
+		int randY = 0;
+		do {
+			Random random = new Random();
+			randX = random.nextInt(30);
+			randY = random.nextInt(30);
+		} while (game.map[randY][randX] != 0);
+		return new int[] { randX * 20, randY * 20 };
+	}
+	
+	public void moveToRandomPosition() {
+
+		if (this.x == targetX && this.y == targetY) {
+			int[] randomPosition = getRandomPosition();
+			targetX = randomPosition[0];
+			targetY = randomPosition[1];
 		}
-		if (randomNumber >= 25 && randomNumber < 50) {
-			randomDirection = GameConstant.LEFT;
+		moveTo(targetX, targetY);
+		if (path.isEmpty()) {
+			targetX = this.x;
+			targetY = this.y;
 		}
-		if (randomNumber >= 50 && randomNumber < 75) {
-			randomDirection = GameConstant.RIGHT;
+	}
+
+	@Override
+	public void update() {
+		if (mode == GameConstant.CHASE) {
+			chaseMode();
+		} else if (mode == GameConstant.SCATTER) {
+			scatterMode();
 		}
-		if (randomNumber >= 75 && randomNumber < 100) {
-			randomDirection = GameConstant.DOWN;
-		}
-		return randomDirection;
 	}
 
 }

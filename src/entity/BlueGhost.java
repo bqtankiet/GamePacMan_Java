@@ -1,20 +1,37 @@
 package entity;
 
 import java.awt.Color;
+import java.awt.Graphics;
 
 import game.Game;
 
-public class BlueGhost extends Ghost{
+public class BlueGhost extends Ghost {
 
 	public BlueGhost(Game game) {
 		super(game, Color.blue);
 		x = 300;
 		y = 280;
+		targetX = this.x;
+		targetY = this.y;
 	}
 
 	@Override
 	public void chaseMode() {
-		
+		targetX = game.redGhost.x;
+		targetY = game.pacman.y;
+		moveTo(targetX, targetY);
+	}
+	
+	@Override
+	public void draw(Graphics g) {
+		super.draw(g);
+		g.drawRect(targetX, targetY, 20, 20);
+
+	}
+	
+	@Override
+	public void update() {
+		chaseMode();
 	}
 
 	@Override
