@@ -1,6 +1,7 @@
 package entity;
 
 import java.awt.Color;
+import java.awt.Graphics;
 
 import game.Game;
 
@@ -13,14 +14,27 @@ public class RedGhost extends Ghost {
 	}
 
 	@Override
+	public void draw(Graphics g) {
+		super.draw(g);
+		g.drawRect(targetX, targetY, 20, 20);
+
+	}
+
+	@Override
+	public void update() {
+//		scatterMode();
+		chaseMode();
+	}
+
+	@Override
 	public void chaseMode() {
-		moveTo(game.pacman.x, game.pacman.y);
+		targetX = game.pacman.x;
+		targetY = game.pacman.y;
+		moveTo(targetX, targetY);
 	}
 
 	@Override
 	public void scatterMode() {
-		int targetX = 0;
-		int targetY = 0;
 		switch (step) {
 		case 1 -> {
 			targetX = 1 * 20;

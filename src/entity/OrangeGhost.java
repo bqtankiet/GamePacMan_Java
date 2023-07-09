@@ -1,30 +1,69 @@
 package entity;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.util.Random;
 
 import game.Game;
+import game.GameConstant;
 
 public class OrangeGhost extends Ghost {
 
 	public OrangeGhost(Game game) {
-		super(game,Color.orange);
+		super(game, Color.orange);
 		x = 340;
 		y = 280;
-		step =2;
+		step = 0;
+	}
+
+	@Override
+	public void draw(Graphics g) {
+		super.draw(g);
+		g.drawRect(targetX, targetY, 20, 20);
+	}
+
+	@Override
+	public void update() {
+		chaseMode();
 	}
 
 	@Override
 	public void chaseMode() {
-//		if(step == 1) {
-//			moveTo(20,28*20);
-//			if (this.x == 20 && this.y == 28*20)
-//				step=0;
-//		} else {
-//		moveTo(game.pacman.x, game.pacman.y);
-//		}
-//		if (Math.abs(this.x - game.pacman.x) <= 5 || Math.abs(this.y - game.pacman.y) <= 5) {
-//			step = 1;
-//		}
+
+		boolean check = false;
+		if (step == 0) {
+			targetX = game.pacman.x;
+			targetY = game.pacman.y;
+			int dx = Math.abs(this.x - game.pacman.x);
+			int dy = Math.abs(this.y - game.pacman.y);
+			if (Math.sqrt(dx * dx + dy * dy) <= 5 * GameConstant.SQUARE) {
+				step = 1;
+				check = true;
+			}
+		}
+		if (step == 1) {
+			int randCol = 0;
+			int randRow = 0;
+			if (path != null && path.isEmpty()) {
+				step = 1;
+				check = true;
+			}
+			if (check) {
+				do {
+					Random random = new Random();
+					randCol = random.nextInt(24 - 5 + 1) + 5;
+					randRow = random.nextInt(25 - 5 + 1) + 4;
+					targetX = randCol * GameConstant.SQUARE;
+					targetY = randRow * GameConstant.SQUARE;
+					check = false;
+				} while (game.map[randRow][randCol] != 0);
+
+			}
+			if (this.x == targetX && this.y == targetY) {
+				step = 0;
+			}
+		}
+		moveTo(targetX, targetY);
 	}
 
 	@Override
@@ -33,26 +72,26 @@ public class OrangeGhost extends Ghost {
 		int targetY = 0;
 		switch (step) {
 		case 0 -> {
-			targetX = 1 * 20;
-			targetY = 28 * 20;
+			targetX = 1 * GameConstant.SQUARE;
+			targetY = 28 * GameConstant.SQUARE;
 			if (this.x == targetX && this.y == targetY)
 				step++;
 		}
 		case 1 -> {
-			targetX = 1 * 20;
-			targetY = 22 * 20;
+			targetX = 1 * GameConstant.SQUARE;
+			targetY = 22 * GameConstant.SQUARE;
 			if (this.x == targetX && this.y == targetY)
 				step++;
 		}
 		case 2 -> {
-			targetX = 1 * 20;
-			targetY = 1 * 20;
+			targetX = 1 * GameConstant.SQUARE;
+			targetY = 1 * GameConstant.SQUARE;
 			if (this.x == targetX && this.y == targetY)
 				step++;
 		}
 		case 3 -> {
-			targetX = 7 * 20;
-			targetY = 1 * 20;
+			targetX = 7 * GameConstant.SQUARE;
+			targetY = 1 * GameConstant.SQUARE;
 			if (this.x == targetX && this.y == targetY)
 				step = 0;
 		}

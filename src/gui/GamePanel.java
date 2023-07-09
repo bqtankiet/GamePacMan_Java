@@ -86,17 +86,8 @@ public class GamePanel extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		drawMap(g);
-		
-		game.pacman.update();
-		game.pacman.draw(g);
-		game.redGhost.update();
-		game.redGhost.draw(g);
-		game.orangeGhost.update();
-		game.orangeGhost.draw(g);
-		game.blueGhost.update();
-		game.blueGhost.draw(g);
-		game.pinkGhost.update();
-		game.pinkGhost.draw(g);
+		game.update();
+		game.draw(g);
 	}
 
 }
