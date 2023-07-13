@@ -2,8 +2,13 @@ package entity;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Random;
+
+import javax.imageio.ImageIO;
 
 import algorithm.AStarPathfinding;
 import algorithm.AStarPathfinding.Node;
@@ -17,6 +22,13 @@ public abstract class Ghost extends Character {
 	public int mode;
 	public int targetX, targetY;
 	public int step = 0;
+	// COLOR INDEX
+	public static final int RED = 0;
+	public static final int PINK = 1;
+	public static final int BLUE = 2;
+	public static final int ORANGE = 3;
+	public static final int GREEN = 4;
+	public static final int PURPLE = 5;
 
 	public Ghost(Game game, Color color) {
 		super(game, color);
@@ -25,6 +37,45 @@ public abstract class Ghost extends Character {
 		pathfinder = new AStarPathfinding();
 		targetX = this.x;
 		targetY = this.y;
+		loadSprite("/ghost.png", 2, 35, 35, 15);
+		currentAnimation = animationDown;
+	}
+
+	public void loadSprite(String path, int numOfSprites, int spriteWidth, int spriteHeight, int space) {
+		int colorIndex = -1;
+		if (this.color.equals(Color.red)) {
+			colorIndex = RED;
+		}
+		if (this.color.equals(Color.orange)) {
+			colorIndex = ORANGE;
+		}
+		if (this.color.equals(Color.pink)) {
+			colorIndex = PINK;
+		}
+		if (this.color.equals(Color.blue)) {
+			colorIndex = BLUE;
+		}
+		InputStream is = getClass().getResourceAsStream(path);
+		try {
+			BufferedImage image = ImageIO.read(is);
+			currentAnimation = new BufferedImage[numOfSprites];
+			animationDown = new BufferedImage[numOfSprites];
+			animationUp = new BufferedImage[numOfSprites];
+			animationLeft = new BufferedImage[numOfSprites];
+			animationRight = new BufferedImage[numOfSprites];
+			for (int i = 0; i < animationDown.length; i++) {
+				animationRight[i] = image.getSubimage(colorIndex * (spriteWidth + space), i * (spriteHeight + space),
+						spriteWidth, spriteHeight);
+				animationDown[i] = image.getSubimage((colorIndex) * (spriteWidth + space),
+						(i + 2) * (spriteHeight + space), spriteWidth, spriteHeight);
+				animationLeft[i] = image.getSubimage((colorIndex) * (spriteWidth + space),
+						(i + 4) * (spriteHeight + space), spriteWidth, spriteHeight);
+				animationUp[i] = image.getSubimage((colorIndex) * (spriteWidth + space),
+						(i + 6) * (spriteHeight + space), spriteWidth, spriteHeight);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void drawPath(Graphics g) {
@@ -52,7 +103,7 @@ public abstract class Ghost extends Character {
 				nextDirection = GameConstant.UP;
 			}
 		}
-		super.update();
+		super.updatePosition();
 	}
 
 	public abstract void chaseMode();
@@ -84,7 +135,7 @@ public abstract class Ghost extends Character {
 	}
 
 	@Override
-	public void update() {
+	public void updatePosition() {
 		switch (mode) {
 		case GameConstant.SCATTER -> scatterMode();
 		case GameConstant.CHASE -> chaseMode();

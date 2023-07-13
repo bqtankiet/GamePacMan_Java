@@ -1,7 +1,5 @@
 package game;
 
-import java.awt.Graphics;
-
 import entity.BlueGhost;
 import entity.Ghost;
 import entity.OrangeGhost;
@@ -38,26 +36,46 @@ public class Game {
 		map[7] = new int[] { 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1 };
 		map[8] = new int[] { 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0 };
 		map[9] = new int[] { 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0 };
-		map[10] = new int[] { 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0 };
-		map[11] = new int[] { 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0 };
-		map[12] = new int[] { 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0 };
-		map[13] = new int[] { 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1 };
-		map[14] = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
-		map[15] = new int[] { 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1 };
-		map[16] = new int[] { 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0 };
-		map[17] = new int[] { 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0 };
-		map[18] = new int[] { 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0 };
-		map[19] = new int[] { 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0 };
-		map[20] = new int[] { 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0 };
-		map[21] = new int[] { 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1 };
-		map[22] = new int[] { 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 };
-		map[23] = new int[] { 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1 };
-		map[24] = new int[] { 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1 };
-		map[25] = new int[] { 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1 };
-		map[26] = new int[] { 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1 };
-		map[27] = new int[] { 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1 };
-		map[28] = new int[] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 };
-		map[29] = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+		map[10] = new int[] { 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0,
+				0 };
+		map[11] = new int[] { 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0,
+				0 };
+		map[12] = new int[] { 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0,
+				0 };
+		map[13] = new int[] { 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1,
+				1 };
+		map[14] = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0,
+				0 };
+		map[15] = new int[] { 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1,
+				1 };
+		map[16] = new int[] { 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0,
+				0 };
+		map[17] = new int[] { 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0,
+				0 };
+		map[18] = new int[] { 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0,
+				0 };
+		map[19] = new int[] { 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0,
+				0 };
+		map[20] = new int[] { 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0,
+				0 };
+		map[21] = new int[] { 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1,
+				1 };
+		map[22] = new int[] { 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+				1 };
+		map[23] = new int[] { 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0,
+				1 };
+		map[24] = new int[] { 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
+				1 };
+		map[25] = new int[] { 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1,
+				1 };
+		map[26] = new int[] { 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0,
+				1 };
+		map[27] = new int[] { 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0,
+				1 };
+		map[28] = new int[] { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				1 };
+		map[29] = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+				1 };
 	}
 
 	public void run() {
@@ -84,7 +102,7 @@ public class Game {
 				if (System.currentTimeMillis() - lastCheckFps >= 1000) {
 					lastCheckFps = System.currentTimeMillis();
 					second++;
-					System.out.printf("Time: %d:%02d | FPS: %d \n",second/60,second%60,frame);
+					System.out.printf("Time: %d:%02d | FPS: %d \n", second / 60, second % 60, frame);
 					frame = 0;
 				}
 			}
@@ -92,6 +110,7 @@ public class Game {
 	}
 
 	public void update() {
+		manageGhostMode();
 		pacman.update();
 		redGhost.update();
 		orangeGhost.update();
@@ -99,11 +118,58 @@ public class Game {
 		blueGhost.update();
 	}
 
-	public void draw(Graphics g) {
-		pacman.draw(g);
-		redGhost.draw(g);
-		orangeGhost.draw(g);
-		pinkGhost.draw(g);
-		blueGhost.draw(g);
+	public void manageGhostMode() {
+		if (second < 2) {
+			return;
+		}
+		if (second == 2) {
+			redGhost.setMode(GameConstant.SCATTER);
+			orangeGhost.setMode(GameConstant.SCATTER);
+			blueGhost.setMode(GameConstant.SCATTER);
+			pinkGhost.setMode(GameConstant.SCATTER);
+		}
+		// RedGhost
+		if (second % 60 == 10) {
+			redGhost.setMode(GameConstant.CHASE);
+		}
+		if (second % 60 == 30) {
+			redGhost.setMode(GameConstant.SCATTER);
+		}
+		if (second % 60 == 50) {
+			redGhost.setMode(GameConstant.CHASE);
+		}
+		if (second % 60 == 0) {
+			redGhost.setMode(GameConstant.SCATTER);
+		}
+		// OrangeGhost
+		if (second % 60 == 15) {
+			orangeGhost.setMode(GameConstant.CHASE);
+		}
+		if (second % 60 == 50) {
+			orangeGhost.setMode(GameConstant.SCATTER);
+		}
+		// BlueGhost
+		if (second % 60 == 20) {
+			blueGhost.setMode(GameConstant.CHASE);
+		}
+		if (second % 60 == 40) {
+			blueGhost.setMode(GameConstant.SCATTER);
+		}
+		// PinkGhost
+		if (second % 60 == 15) {
+			pinkGhost.setMode(GameConstant.CHASE);
+		}
+		if (second % 60 == 30) {
+			pinkGhost.setMode(GameConstant.SCATTER);
+		}
+		if (second % 60 == 30) {
+			pinkGhost.setMode(GameConstant.SCATTER);
+		}
+		if (second % 60 == 45) {
+			pinkGhost.setMode(GameConstant.CHASE);
+		}
+		if (second % 60 == 0) {
+			pinkGhost.setMode(GameConstant.SCATTER);
+		}
 	}
 }
