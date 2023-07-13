@@ -62,7 +62,7 @@ public class GamePanel extends JPanel {
 		addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				System.out.println("x = "+e.getX()/GameConstant.SQUARE+ ", y = "+e.getY()/GameConstant.SQUARE);
+				System.out.println("x = " + e.getX() / GameConstant.SQUARE + ", y = " + e.getY() / GameConstant.SQUARE);
 			}
 		});
 		addKeyListener(new KeyBoardInput(game));

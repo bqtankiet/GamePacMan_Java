@@ -16,28 +16,21 @@ public class BlueGhost extends Ghost {
 	}
 
 	@Override
-	public void chaseMode() {
-		targetX = game.redGhost.x;
-		targetY = game.pacman.y;
-		moveTo(targetX, targetY);
-	}
-	
-	@Override
 	public void draw(Graphics g) {
 		super.draw(g);
 		g.drawRect(targetX, targetY, 20, 20);
 
 	}
-	
+
 	@Override
-	public void update() {
-		chaseMode();
+	public void chaseMode() {
+		targetX = game.redGhost.x;
+		targetY = game.pacman.y;
+		moveTo(targetX, targetY);
 	}
 
 	@Override
 	public void scatterMode() {
-		int targetX = 0;
-		int targetY = 0;
 		switch (step) {
 		case 0 -> {
 			targetX = 28 * 20;

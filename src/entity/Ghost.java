@@ -12,10 +12,11 @@ import game.GameConstant;
 
 public abstract class Ghost extends Character {
 
-	AStarPathfinding pathfinder;
-	List<Node> path;
-	int mode;
-	int targetX, targetY;
+	public AStarPathfinding pathfinder;
+	public List<Node> path;
+	public int mode;
+	public int targetX, targetY;
+	public int step = 0;
 
 	public Ghost(Game game, Color color) {
 		super(game, color);
@@ -54,8 +55,6 @@ public abstract class Ghost extends Character {
 		super.update();
 	}
 
-	int step = 0;
-
 	public abstract void chaseMode();
 
 	public abstract void scatterMode();
@@ -70,9 +69,8 @@ public abstract class Ghost extends Character {
 		} while (game.map[randY][randX] != 0);
 		return new int[] { randX * 20, randY * 20 };
 	}
-	
-	public void moveToRandomPosition() {
 
+	public void moveToRandomPosition() {
 		if (this.x == targetX && this.y == targetY) {
 			int[] randomPosition = getRandomPosition();
 			targetX = randomPosition[0];
@@ -87,11 +85,30 @@ public abstract class Ghost extends Character {
 
 	@Override
 	public void update() {
-		if (mode == GameConstant.CHASE) {
-			chaseMode();
-		} else if (mode == GameConstant.SCATTER) {
-			scatterMode();
+		switch (mode) {
+		case GameConstant.SCATTER -> scatterMode();
+		case GameConstant.CHASE -> chaseMode();
 		}
 	}
 
+	public boolean canMoveTo(int x, int y) {
+		if (x < 0 || x >= 600 || y < 0 || y >= 600) { // out of range
+			return false;
+		}
+		if (game.map[y / GameConstant.SQUARE][x / GameConstant.SQUARE] == 1) { // is wall
+			return false;
+		} else { // is not wall but have no way to move
+			List<Node> path = this.pathfinder.findPath(game.map, this.y / GameConstant.SQUARE,
+					this.x / GameConstant.SQUARE, y / GameConstant.SQUARE, x / GameConstant.SQUARE);
+			if (path.isEmpty())
+				return false;
+		}
+
+		return true;
+	}
+
+	public void setMode(int mode) {
+		step = 0;
+		this.mode = mode;
+	}
 }
