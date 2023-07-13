@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import algorithm.AStarPathfinding;
 import algorithm.AStarPathfinding.Node;
@@ -19,11 +20,6 @@ public class PinkGhost extends Ghost {
 	}
 
 	@Override
-	public void update() {
-		chaseMode();
-	}
-
-	@Override
 	public void draw(Graphics g) {
 		super.draw(g);
 		g.drawRect(targetX, targetY, 20, 20);
@@ -31,39 +27,58 @@ public class PinkGhost extends Ghost {
 
 	@Override
 	public void chaseMode() {
-		switch (game.pacman.direction) {
-		case GameConstant.RIGHT -> {
-			targetY = game.pacman.y;
-			targetX = game.pacman.x + 4 * GameConstant.SQUARE;
-		}
-		case GameConstant.LEFT -> {
-			targetY = game.pacman.y;
-			targetX = game.pacman.x - 4 * GameConstant.SQUARE;
+		switch (step) {
+		case 0 -> {
+			switch (game.pacman.direction) {
+			case GameConstant.RIGHT -> {
+				targetY = game.pacman.y;
+				targetX = game.pacman.x + 4 * GameConstant.SQUARE;
+			}
+			case GameConstant.LEFT -> {
+				targetY = game.pacman.y;
+				targetX = game.pacman.x - 4 * GameConstant.SQUARE;
 
+			}
+			case GameConstant.UP -> {
+				targetX = game.pacman.x;
+				targetY = game.pacman.y - 4 * GameConstant.SQUARE;
+			}
+			case GameConstant.DOWN -> {
+				targetX = game.pacman.x;
+				targetY = game.pacman.y + 4 * GameConstant.SQUARE;
+			}
+			}
+			if ((this.x == targetX && this.y == targetY) || !this.canMoveTo(targetX, targetY)) {
+				step++;
+				targetX = -1;
+			}
 		}
-		case GameConstant.UP -> {
-			targetX = game.pacman.x;
-			targetY = game.pacman.y - 4 * GameConstant.SQUARE;
-		}
-		case GameConstant.DOWN -> {
-			targetX = game.pacman.x;
-			targetY = game.pacman.y + 4 * GameConstant.SQUARE;
+		case 1 -> {
+			if (targetX == -1) {
+				int randX = -1;
+				int randY = -1;
+				int radiusRange = 10 * GameConstant.SQUARE;
+				Random random = new Random();
+				do {
+					double randAngle = random.nextDouble() * 2 * Math.PI;
+					int randRadius = random.nextInt(radiusRange);
+
+					randX = (game.pacman.x + (int) (randRadius * Math.cos(randAngle))) / 20 * 20;
+					randY = (game.pacman.y + (int) (randRadius * Math.sin(randAngle))) / 20 * 20;
+				} while (!this.canMoveTo(randX, randY));
+				targetX = randX;
+				targetY = randY;
+			}
+			if ((this.x == targetX && this.y == targetY) || !this.canMoveTo(targetX, targetY)) {
+				step = 0;
+			}
 		}
 		}
 		moveTo(targetX, targetY);
 	}
-	
-	public boolean canMoveTo(int x, int y) {
-		List<Node> path = new ArrayList<>();
-		path = new AStarPathfinding().findPath(game.map, this.y / size, this.x / size, y / size, x / size);
-		return !path.isEmpty();
-
-	}
 
 	@Override
 	public void scatterMode() {
-		int targetX = 0;
-		int targetY = 0;
 		switch (step) {
 		case 0 -> {
 			targetX = 1 * 20;

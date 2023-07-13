@@ -21,12 +21,6 @@ public class RedGhost extends Ghost {
 	}
 
 	@Override
-	public void update() {
-//		scatterMode();
-		chaseMode();
-	}
-
-	@Override
 	public void chaseMode() {
 		targetX = game.pacman.x;
 		targetY = game.pacman.y;
