@@ -12,7 +12,8 @@ public class PacMan extends Character {
 		y = 20;
 		size = GameConstant.SQUARE;
 		speed = 2;
+		direction = GameConstant.UP;
+		loadSprite("/pacman.png", 3, 33, 33, 17);
 	}
-
 
 }

@@ -2,11 +2,17 @@ package entity;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.imageio.ImageIO;
 
 import game.Game;
 import game.GameConstant;
 
 public abstract class Character {
+	// SETTING
 	public int size = GameConstant.SQUARE;
 	public final Color color;
 	public int x, y;
@@ -14,9 +20,79 @@ public abstract class Character {
 	public int speed;
 	public Game game;
 
+	// ANIMATION
+	public BufferedImage[] currentAnimation;
+	public BufferedImage[] animationDown;
+	public BufferedImage[] animationLeft;
+	public BufferedImage[] animationRight;
+	public BufferedImage[] animationUp;
+	public int spriteIndex, animationTick, animationSpeed = 10;
+
 	public Character(Game game, Color color) {
 		this.game = game;
 		this.color = color;
+	}
+
+	public void update() {
+		this.updatePosition();
+		this.updateAnimation();
+	}
+
+	public void setAnimaitonDirection(int direction) {
+		switch (direction) {
+		case GameConstant.UP: {
+			currentAnimation = animationUp;
+			break;
+		}
+		case GameConstant.DOWN: {
+			currentAnimation = animationDown;
+			break;
+		}
+		case GameConstant.RIGHT: {
+			currentAnimation = animationRight;
+			break;
+		}
+		case GameConstant.LEFT: {
+			currentAnimation = animationLeft;
+			break;
+		}
+		}
+	}
+
+	public void loadSprite(String path, int numOfSprites, int spriteWidth, int spriteHeight, int space) {
+		InputStream is = getClass().getResourceAsStream(path);
+		try {
+			BufferedImage image = ImageIO.read(is);
+			currentAnimation = new BufferedImage[numOfSprites];
+			animationDown = new BufferedImage[numOfSprites];
+			animationUp = new BufferedImage[numOfSprites];
+			animationLeft = new BufferedImage[numOfSprites];
+			animationRight = new BufferedImage[numOfSprites];
+			for (int i = 0; i < animationDown.length; i++) {
+				animationDown[i] = image.getSubimage(0, i * spriteHeight + space * i, spriteWidth, spriteHeight);
+				animationUp[i] = image.getSubimage(0, (i + 6) * spriteHeight + space * (i + 6), spriteWidth,
+						spriteHeight);
+				animationRight[i] = image.getSubimage(0, (i + 9) * spriteHeight + space * (i + 9), spriteWidth,
+						spriteHeight);
+				animationLeft[i] = image.getSubimage(0, (i + 3) * spriteHeight + space * (i + 3), spriteWidth,
+						spriteHeight);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void updateAnimation() {
+		if (currentAnimation == null)
+			return;
+		animationTick++;
+		if (animationTick >= animationSpeed) {
+			animationTick = 0;
+			spriteIndex++;
+			if (spriteIndex >= currentAnimation.length) {
+				spriteIndex = 0;
+			}
+		}
 	}
 
 	public void move(int direction) {
@@ -63,8 +139,8 @@ public abstract class Character {
 		return (map[top][right] != 1 && map[top][left] != 1 && map[bottom][left] != 1 && map[bottom][right] != 1);
 	}
 
-	public void update() {
-
+	public void updatePosition() {
+		setAnimaitonDirection(this.direction);
 		try {
 			if (canMove(nextDirection))
 				direction = nextDirection;

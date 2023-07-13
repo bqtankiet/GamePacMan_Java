@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import game.Game;
+import game.GameConstant;
 
 public class RedGhost extends Ghost {
 

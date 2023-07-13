@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.Color;
+
 public class GameConstant {
 
 	public static final int SQUARE = 20;
@@ -10,5 +12,8 @@ public class GameConstant {
 	public static final int CHASE = 5;
 	public static final int SCATTER = 6;
 	public static final int FRIGHTED = 7;
+	public static final int WALL_STROKE = 3;
+	public static final Color BACKGROUND = Color.black;
+	public static final Color WALL_COLOR = Color.blue;
 
 }
