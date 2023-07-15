@@ -17,6 +17,9 @@ public class PinkGhost extends Ghost {
 		super(game, Color.PINK);
 		x = 240;
 		y = 280;
+		loadSprite("/ghost.png", 2, 35, 35, 15,1);
+		currentAnimation = animationDown;
+
 	}
 
 	@Override

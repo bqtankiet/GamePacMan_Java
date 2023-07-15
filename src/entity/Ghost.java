@@ -27,8 +27,6 @@ public abstract class Ghost extends Character {
 	public static final int PINK = 1;
 	public static final int BLUE = 2;
 	public static final int ORANGE = 3;
-	public static final int GREEN = 4;
-	public static final int PURPLE = 5;
 
 	public Ghost(Game game, Color color) {
 		super(game, color);
@@ -37,11 +35,9 @@ public abstract class Ghost extends Character {
 		pathfinder = new AStarPathfinding();
 		targetX = this.x;
 		targetY = this.y;
-		loadSprite("/ghost.png", 2, 35, 35, 15);
-		currentAnimation = animationDown;
 	}
 
-	public void loadSprite(String path, int numOfSprites, int spriteWidth, int spriteHeight, int space) {
+	public int getColorIndex() {
 		int colorIndex = -1;
 		if (this.color.equals(Color.red)) {
 			colorIndex = RED;
@@ -55,6 +51,11 @@ public abstract class Ghost extends Character {
 		if (this.color.equals(Color.blue)) {
 			colorIndex = BLUE;
 		}
+		return colorIndex;
+	}
+
+	public void loadSprite(String path, int numOfSprites, int spriteWidth, int spriteHeight, int space, int index) {
+
 		InputStream is = getClass().getResourceAsStream(path);
 		try {
 			BufferedImage image = ImageIO.read(is);
@@ -64,14 +65,10 @@ public abstract class Ghost extends Character {
 			animationLeft = new BufferedImage[numOfSprites];
 			animationRight = new BufferedImage[numOfSprites];
 			for (int i = 0; i < animationDown.length; i++) {
-				animationRight[i] = image.getSubimage(colorIndex * (spriteWidth + space), i * (spriteHeight + space),
-						spriteWidth, spriteHeight);
-				animationDown[i] = image.getSubimage((colorIndex) * (spriteWidth + space),
-						(i + 2) * (spriteHeight + space), spriteWidth, spriteHeight);
-				animationLeft[i] = image.getSubimage((colorIndex) * (spriteWidth + space),
-						(i + 4) * (spriteHeight + space), spriteWidth, spriteHeight);
-				animationUp[i] = image.getSubimage((colorIndex) * (spriteWidth + space),
-						(i + 6) * (spriteHeight + space), spriteWidth, spriteHeight);
+				animationRight[i] = image.getSubimage(index * (spriteWidth + space), i * (spriteHeight + space), spriteWidth, spriteHeight);
+				animationDown[i] = image.getSubimage((index) * (spriteWidth + space), (i + 2) * (spriteHeight + space), spriteWidth, spriteHeight);
+				animationLeft[i] = image.getSubimage((index) * (spriteWidth + space), (i + 4) * (spriteHeight + space), spriteWidth, spriteHeight);
+				animationUp[i] = image.getSubimage((index) * (spriteWidth + space), (i + 6) * (spriteHeight + space), spriteWidth, spriteHeight);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -110,6 +107,41 @@ public abstract class Ghost extends Character {
 
 	public abstract void scatterMode();
 
+	public void frightenedMode() {
+
+		switch (step) {
+		case 0 -> {
+			int maxDistance = 0;
+			int farthestX = 0;
+			int farthestY = 0;
+
+			// Iterate over the game board
+			for (int row = 0; row < game.map.length; row++) {
+				for (int col = 0; col < game.map[0].length; col++) {
+					if (game.map[row][col] != 1) {
+						// Calculate the distance between the ghost and the current position
+						int distance = Math.abs(this.x - col * 20) + Math.abs(this.y - row * 20);
+						if (distance > maxDistance) {
+							maxDistance = distance;
+							farthestX = col * 20;
+							farthestY = row * 20;
+						}
+					}
+				}
+			}
+			targetX = farthestX;
+			targetY = farthestY;
+			step++;
+		}
+		case 1 -> {
+			if (this.x == targetX && this.y == targetY) {
+				step = 0;
+			}
+		}
+		}
+		moveTo(targetX, targetY);
+	}
+
 	public int[] getRandomPosition() {
 		int randX = 0;
 		int randY = 0;
@@ -139,27 +171,17 @@ public abstract class Ghost extends Character {
 		switch (mode) {
 		case GameConstant.SCATTER -> scatterMode();
 		case GameConstant.CHASE -> chaseMode();
-		}
-	}
+		case GameConstant.FRIGHTENED -> frightenedMode();
 
-	public boolean canMoveTo(int x, int y) {
-		if (x < 0 || x >= 600 || y < 0 || y >= 600) { // out of range
-			return false;
 		}
-		if (game.map[y / GameConstant.SQUARE][x / GameConstant.SQUARE] == 1) { // is wall
-			return false;
-		} else { // is not wall but have no way to move
-			List<Node> path = this.pathfinder.findPath(game.map, this.y / GameConstant.SQUARE,
-					this.x / GameConstant.SQUARE, y / GameConstant.SQUARE, x / GameConstant.SQUARE);
-			if (path.isEmpty())
-				return false;
-		}
-
-		return true;
 	}
 
 	public void setMode(int mode) {
 		step = 0;
 		this.mode = mode;
+		if (mode == GameConstant.FRIGHTENED) {
+			loadSprite("/ghost.png", 2, 35, 35, 15, 6);
+		}
 	}
+
 }

@@ -33,7 +33,7 @@ public class GamePanel extends JPanel {
 					int col = e.getX() / GameConstant.SQUARE;
 					int row = e.getY() / GameConstant.SQUARE;
 					if (row >= 0 && row < game.map.length && col >= 0 && col < game.map[0].length) {
-						game.map[row][col] = 1;
+						game.map[row][col] = 3;
 						repaint();
 					}
 				}
@@ -85,6 +85,21 @@ public class GamePanel extends JPanel {
 			}
 		}
 		drawWall(g);
+		drawFood(g);
+	}
+
+	private void drawFood(Graphics g) {
+		for (int i = 0; i < game.map.length; i++) {
+			for (int j = 0; j < game.map[0].length; j++) {
+				int square = GameConstant.SQUARE;
+				g.setColor(Color.orange);
+				if (game.map[i][j] == 0)
+					g.fillRect((j * square + square / 2), (i * square + square / 2), 3, 3);
+				if (game.map[i][j] == 3) {
+					g.fillOval((j * square + 3), (i * square + 3), 14, 14);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -186,4 +201,5 @@ public class GamePanel extends JPanel {
 
 		g2d.drawImage(image, blueGhost.x, blueGhost.y, GameConstant.SQUARE, GameConstant.SQUARE, this);
 	}
+
 }

@@ -13,6 +13,9 @@ public class BlueGhost extends Ghost {
 		y = 280;
 		targetX = this.x;
 		targetY = this.y;
+		loadSprite("/ghost.png", 2, 35, 35, 15, 2);
+		currentAnimation = animationDown;
+
 	}
 
 	@Override

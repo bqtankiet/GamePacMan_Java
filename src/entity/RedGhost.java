@@ -12,6 +12,9 @@ public class RedGhost extends Ghost {
 		super(game, Color.red);
 		x = 260;
 		y = 240;
+		loadSprite("/ghost.png", 2, 35, 35, 15,0);
+		currentAnimation = animationDown;
+
 	}
 
 	@Override
