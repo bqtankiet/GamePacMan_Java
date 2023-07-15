@@ -5,9 +5,12 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import algorithm.AStarPathfinding;
+import algorithm.AStarPathfinding.Node;
 import game.Game;
 import game.GameConstant;
 
@@ -36,6 +39,22 @@ public abstract class Character {
 	public void update() {
 		this.updatePosition();
 		this.updateAnimation();
+	}
+
+	public boolean canMoveTo(int x, int y) {
+		if (x < 0 || x >= 600 || y < 0 || y >= 600) { // out of range
+			return false;
+		}
+		if (game.map[y / GameConstant.SQUARE][x / GameConstant.SQUARE] == 1) { // is wall
+			return false;
+		} else { // is not wall but have no way to move
+			List<Node> path = new AStarPathfinding().findPath(game.map, this.y / GameConstant.SQUARE,
+					this.x / GameConstant.SQUARE, y / GameConstant.SQUARE, x / GameConstant.SQUARE);
+			if (path.isEmpty())
+				return false;
+		}
+
+		return true;
 	}
 
 	public void setAnimaitonDirection(int direction) {

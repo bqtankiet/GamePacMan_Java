@@ -75,7 +75,7 @@ public class AStarPathfinding {
 		for (int i = 0; i < 4; i++) {
 			int childRow = node.row + rowDir[i];
 			int childCol = node.col + colDir[i];
-			if (childRow >= 0 && childRow < height && childCol >= 0 && childCol < width && map[childRow][childCol] == 0) {
+			if (childRow >= 0 && childRow < height && childCol >= 0 && childCol < width && map[childRow][childCol] != 1) {
 				Node childNode = new Node(childRow, childCol);
 				childNode.parent = node;
 				result.add(childNode);

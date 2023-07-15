@@ -13,6 +13,8 @@ public class OrangeGhost extends Ghost {
 		super(game, Color.orange);
 		x = 340;
 		y = 280;
+		loadSprite("/ghost.png", 2, 35, 35, 15,3);
+		currentAnimation = animationDown;
 	}
 
 	@Override

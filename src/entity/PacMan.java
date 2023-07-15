@@ -16,4 +16,26 @@ public class PacMan extends Character {
 		loadSprite("/pacman.png", 3, 33, 33, 17);
 	}
 
+	public void eat() {
+		int[][] map = game.map;
+		int centerX = this.x + 10;
+		int centerY = this.y + 10;
+		try {
+			if (map[centerY / 20][centerX / 20] == 3) {
+				System.out.println("Frightened");
+				game.isFrightened = true;
+				game.checker = true;
+			}
+			map[centerY / 20][centerX / 20] = 2;
+		} catch (ArrayIndexOutOfBoundsException e) {
+		}
+	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		super.update();
+		eat();
+	}
+
 }
