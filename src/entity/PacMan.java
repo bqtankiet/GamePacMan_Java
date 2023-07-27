@@ -38,4 +38,11 @@ public class PacMan extends Character {
 		eat();
 	}
 
+	@Override
+	public void die() {
+		x = 20;
+		y = 20;
+		game.respawnCharacter();
+	}
+
 }

@@ -2,6 +2,7 @@ package entity;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,7 +56,6 @@ public abstract class Ghost extends Character {
 	}
 
 	public void loadSprite(String path, int numOfSprites, int spriteWidth, int spriteHeight, int space, int index) {
-
 		InputStream is = getClass().getResourceAsStream(path);
 		try {
 			BufferedImage image = ImageIO.read(is);
@@ -73,6 +73,7 @@ public abstract class Ghost extends Character {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		currentAnimation = animationDown;
 	}
 
 	public void drawPath(Graphics g) {
@@ -182,6 +183,14 @@ public abstract class Ghost extends Character {
 		if (mode == GameConstant.FRIGHTENED) {
 			loadSprite("/ghost.png", 2, 35, 35, 15, 6);
 		}
+	}
+
+	@Override
+	public void die() {
+		// TODO Auto-generated method stub
+		x = 340;
+		y = 280;
+		loadSprite("/ghost.png", 2, 35, 35, 15, getColorIndex());
 	}
 
 }

@@ -18,7 +18,6 @@ public class PinkGhost extends Ghost {
 		x = 240;
 		y = 280;
 		loadSprite("/ghost.png", 2, 35, 35, 15,1);
-		currentAnimation = animationDown;
 
 	}
 

@@ -2,6 +2,7 @@ package entity;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,6 +23,7 @@ public abstract class Character {
 	public int direction = -1, nextDirection = -1;
 	public int speed;
 	public Game game;
+	public Rectangle hitbox;
 
 	// ANIMATION
 	public BufferedImage[] currentAnimation;
@@ -36,6 +38,12 @@ public abstract class Character {
 		this.color = color;
 	}
 
+	public int[] getCenterPoint() {
+		int centerX = this.x + 10;
+		int centerY = this.y + 10;
+		return new int[] { centerX, centerY };
+	}
+
 	public void update() {
 		this.updatePosition();
 		this.updateAnimation();
@@ -48,8 +56,8 @@ public abstract class Character {
 		if (game.map[y / GameConstant.SQUARE][x / GameConstant.SQUARE] == 1) { // is wall
 			return false;
 		} else { // is not wall but have no way to move
-			List<Node> path = new AStarPathfinding().findPath(game.map, this.y / GameConstant.SQUARE,
-					this.x / GameConstant.SQUARE, y / GameConstant.SQUARE, x / GameConstant.SQUARE);
+			List<Node> path = new AStarPathfinding().findPath(game.map, this.y / GameConstant.SQUARE, this.x / GameConstant.SQUARE, y / GameConstant.SQUARE,
+					x / GameConstant.SQUARE);
 			if (path.isEmpty())
 				return false;
 		}
@@ -89,12 +97,9 @@ public abstract class Character {
 			animationRight = new BufferedImage[numOfSprites];
 			for (int i = 0; i < animationDown.length; i++) {
 				animationDown[i] = image.getSubimage(0, i * spriteHeight + space * i, spriteWidth, spriteHeight);
-				animationUp[i] = image.getSubimage(0, (i + 6) * spriteHeight + space * (i + 6), spriteWidth,
-						spriteHeight);
-				animationRight[i] = image.getSubimage(0, (i + 9) * spriteHeight + space * (i + 9), spriteWidth,
-						spriteHeight);
-				animationLeft[i] = image.getSubimage(0, (i + 3) * spriteHeight + space * (i + 3), spriteWidth,
-						spriteHeight);
+				animationUp[i] = image.getSubimage(0, (i + 6) * spriteHeight + space * (i + 6), spriteWidth, spriteHeight);
+				animationRight[i] = image.getSubimage(0, (i + 9) * spriteHeight + space * (i + 9), spriteWidth, spriteHeight);
+				animationLeft[i] = image.getSubimage(0, (i + 3) * spriteHeight + space * (i + 3), spriteWidth, spriteHeight);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -203,4 +208,6 @@ public abstract class Character {
 		g.setColor(color);
 		g.fillRect(x, y, size, size);
 	}
+
+	public abstract void die();
 }
