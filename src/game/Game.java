@@ -1,6 +1,10 @@
 package game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import entity.BlueGhost;
+import entity.Character;
 import entity.Ghost;
 import entity.OrangeGhost;
 import entity.PacMan;
@@ -143,7 +147,9 @@ public class Game {
 	}
 
 	public void update() {
+		System.out.println(redGhost.mode);
 		manageGhostMode();
+		checkGame();
 		pacman.update();
 		redGhost.update();
 		orangeGhost.update();
@@ -151,88 +157,169 @@ public class Game {
 		blueGhost.update();
 	}
 
+	private void checkGame() {
+		ArrayList<Ghost> ghosts = new ArrayList<>();
+		ghosts.add(redGhost);
+		ghosts.add(orangeGhost);
+		ghosts.add(blueGhost);
+		ghosts.add(pinkGhost);
+		for (Ghost ghost : ghosts) {
+			if (checkCollision(pacman, ghost)) {
+				if (ghost.mode == GameConstant.FRIGHTENED) {
+					ghost.die();
+				} else {
+					pacman.die();
+				}
+			}
+		}
+//		if (checkCollision(pacman, redGhost)) {
+//			if (redGhost.mode == GameConstant.FRIGHTENED) {
+//				redGhost.die();
+//			} else {
+//				pacman.die();
+//			}
+//		}
+//		if (checkCollision(pacman, blueGhost)) {
+//			if (blueGhost.mode == GameConstant.FRIGHTENED) {
+//				blueGhost.die();
+//			} else {
+//				pacman.die();
+//
+//			}
+//		}
+//		if (checkCollision(pacman, pinkGhost)) {
+//			if (pinkGhost.mode == GameConstant.FRIGHTENED) {
+//				pinkGhost.die();
+//			} else {
+//				pacman.die();
+//			}
+//		}
+//		if (checkCollision(pacman, orangeGhost)) {
+//			if (orangeGhost.mode == GameConstant.FRIGHTENED) {
+//				orangeGhost.die();
+//			} else {
+//				pacman.die();
+//			}
+//		}
+	}
+
+	private boolean checkCollision(Character character1, Character character2) {
+		return (character1.getCenterPoint()[0] / 20 == character2.getCenterPoint()[0] / 20) && (character1.getCenterPoint()[1] / 20 == character2.getCenterPoint()[1] / 20);
+	}
+
 	public void manageGhostMode() {
 
 		if (isFrightened) {
-			if (checker) {
-				startFrightened();
-				frightenedStartTime = second;
-				checker = false;
-			}
-			if (second - frightenedStartTime < 5) {
+			startFrightened();
+		} else {
+
+			if (second < 2) {
 				return;
-			} else {
-				isFrightened = false;
-				redGhost.loadSprite("/ghost.png", 2, 35, 35, 15, redGhost.getColorIndex());
-				orangeGhost.loadSprite("/ghost.png", 2, 35, 35, 15, orangeGhost.getColorIndex());
-				pinkGhost.loadSprite("/ghost.png", 2, 35, 35, 15, pinkGhost.getColorIndex());
-				blueGhost.loadSprite("/ghost.png", 2, 35, 35, 15, blueGhost.getColorIndex());
+
+			}
+			if (second == 2) {
+				redGhost.setMode(GameConstant.SCATTER);
+				orangeGhost.setMode(GameConstant.SCATTER);
+				blueGhost.setMode(GameConstant.SCATTER);
+				pinkGhost.setMode(GameConstant.SCATTER);
+			}
+			// RedGhost
+			if (second % 60 == 10) {
 				redGhost.setMode(GameConstant.CHASE);
+			}
+			if (second % 60 == 30) {
+				redGhost.setMode(GameConstant.SCATTER);
+			}
+			if (second % 60 == 50) {
+				redGhost.setMode(GameConstant.CHASE);
+			}
+			if (second % 60 == 0) {
+				redGhost.setMode(GameConstant.SCATTER);
+			}
+			// OrangeGhost
+			if (second % 60 == 15) {
 				orangeGhost.setMode(GameConstant.CHASE);
+			}
+			if (second % 60 == 50) {
+				orangeGhost.setMode(GameConstant.SCATTER);
+			}
+			// BlueGhost
+			if (second % 60 == 20) {
 				blueGhost.setMode(GameConstant.CHASE);
+			}
+			if (second % 60 == 40) {
+				blueGhost.setMode(GameConstant.SCATTER);
+			}
+			// PinkGhost
+			if (second % 60 == 15) {
 				pinkGhost.setMode(GameConstant.CHASE);
 			}
+			if (second % 60 == 30) {
+				pinkGhost.setMode(GameConstant.SCATTER);
+			}
+			if (second % 60 == 30) {
+				pinkGhost.setMode(GameConstant.SCATTER);
+			}
+			if (second % 60 == 45) {
+				pinkGhost.setMode(GameConstant.CHASE);
+			}
+			if (second % 60 == 0) {
+				pinkGhost.setMode(GameConstant.SCATTER);
+			}
 		}
 
-		if (second < 2) {
+	}
+
+	public void startFrightened() {
+		if (checker) {
+			redGhost.setMode(GameConstant.FRIGHTENED);
+			orangeGhost.setMode(GameConstant.FRIGHTENED);
+			blueGhost.setMode(GameConstant.FRIGHTENED);
+			pinkGhost.setMode(GameConstant.FRIGHTENED);
+			frightenedStartTime = second;
+			checker = false;
+		}
+		if (second - frightenedStartTime < 5) {
 			return;
-		}
-		if (second == 2) {
-			redGhost.setMode(GameConstant.SCATTER);
-			orangeGhost.setMode(GameConstant.SCATTER);
-			blueGhost.setMode(GameConstant.SCATTER);
-			pinkGhost.setMode(GameConstant.SCATTER);
-		}
-		// RedGhost
-		if (second % 60 == 10) {
+		} else {
+			redGhost.loadSprite("/ghost.png", 2, 35, 35, 15, redGhost.getColorIndex());
+			orangeGhost.loadSprite("/ghost.png", 2, 35, 35, 15, orangeGhost.getColorIndex());
+			pinkGhost.loadSprite("/ghost.png", 2, 35, 35, 15, pinkGhost.getColorIndex());
+			blueGhost.loadSprite("/ghost.png", 2, 35, 35, 15, blueGhost.getColorIndex());
 			redGhost.setMode(GameConstant.CHASE);
-		}
-		if (second % 60 == 30) {
-			redGhost.setMode(GameConstant.SCATTER);
-		}
-		if (second % 60 == 50) {
-			redGhost.setMode(GameConstant.CHASE);
-		}
-		if (second % 60 == 0) {
-			redGhost.setMode(GameConstant.SCATTER);
-		}
-		// OrangeGhost
-		if (second % 60 == 15) {
 			orangeGhost.setMode(GameConstant.CHASE);
-		}
-		if (second % 60 == 50) {
-			orangeGhost.setMode(GameConstant.SCATTER);
-		}
-		// BlueGhost
-		if (second % 60 == 20) {
 			blueGhost.setMode(GameConstant.CHASE);
-		}
-		if (second % 60 == 40) {
-			blueGhost.setMode(GameConstant.SCATTER);
-		}
-		// PinkGhost
-		if (second % 60 == 15) {
 			pinkGhost.setMode(GameConstant.CHASE);
-		}
-		if (second % 60 == 30) {
-			pinkGhost.setMode(GameConstant.SCATTER);
-		}
-		if (second % 60 == 30) {
-			pinkGhost.setMode(GameConstant.SCATTER);
-		}
-		if (second % 60 == 45) {
-			pinkGhost.setMode(GameConstant.CHASE);
-		}
-		if (second % 60 == 0) {
-			pinkGhost.setMode(GameConstant.SCATTER);
+			isFrightened = false;
+//			redGhost.setMode(GameConstant.CHASE);
+//			orangeGhost.setMode(GameConstant.CHASE);
+//			blueGhost.setMode(GameConstant.CHASE);
+//			pinkGhost.setMode(GameConstant.CHASE);
 		}
 
 	}
 
-	private void startFrightened() {
-		redGhost.setMode(GameConstant.FRIGHTENED);
-		orangeGhost.setMode(GameConstant.FRIGHTENED);
-		blueGhost.setMode(GameConstant.FRIGHTENED);
-		pinkGhost.setMode(GameConstant.FRIGHTENED);
+	public void respawnCharacter() {
+		pacman.x = 20;
+		pacman.y = 20;
+		redGhost.x = 260;
+		redGhost.y = 240;
+		pinkGhost.x = 240;
+		pinkGhost.y = 280;
+		blueGhost.x = 300;
+		blueGhost.y = 280;
+		orangeGhost.x = 340;
+		orangeGhost.y = 280;
+		redGhost.setMode(-1);
+		orangeGhost.setMode(-1);
+		blueGhost.setMode(-1);
+		pinkGhost.setMode(-1);
+		redGhost.loadSprite("/ghost.png", 2, 35, 35, 15, redGhost.getColorIndex());
+		orangeGhost.loadSprite("/ghost.png", 2, 35, 35, 15, orangeGhost.getColorIndex());
+		blueGhost.loadSprite("/ghost.png", 2, 35, 35, 15, blueGhost.getColorIndex());
+		pinkGhost.loadSprite("/ghost.png", 2, 35, 35, 15, pinkGhost.getColorIndex());
+		second = 0;
+
 	}
+
 }

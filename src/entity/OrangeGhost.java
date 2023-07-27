@@ -14,7 +14,6 @@ public class OrangeGhost extends Ghost {
 		x = 340;
 		y = 280;
 		loadSprite("/ghost.png", 2, 35, 35, 15,3);
-		currentAnimation = animationDown;
 	}
 
 	@Override
