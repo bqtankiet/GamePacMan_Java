@@ -190,6 +190,7 @@ public abstract class Ghost extends Character {
 		// TODO Auto-generated method stub
 		x = 340;
 		y = 280;
+		mode = GameConstant.SCATTER;
 		loadSprite("/ghost.png", 2, 35, 35, 15, getColorIndex());
 	}
 
