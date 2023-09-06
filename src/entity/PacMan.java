@@ -40,9 +40,10 @@ public class PacMan extends Character {
 
 	@Override
 	public void die() {
-		x = 20;
-		y = 20;
-		game.respawnCharacter();
+		System.out.println("Game is over");
+		game.pauseGame();
+//		x = 20;
+//		y = 20;
 	}
-
+	
 }

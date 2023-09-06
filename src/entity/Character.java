@@ -24,6 +24,7 @@ public abstract class Character {
 	public int speed;
 	public Game game;
 	public Rectangle hitbox;
+	public boolean paused;
 
 	// ANIMATION
 	public BufferedImage[] currentAnimation;
@@ -45,8 +46,18 @@ public abstract class Character {
 	}
 
 	public void update() {
-		this.updatePosition();
-		this.updateAnimation();
+		if (!paused) {
+			this.updatePosition();
+			this.updateAnimation();
+		}
+	}
+
+	public void pause() {
+		this.paused = true;
+	}
+
+	public void continue_() {
+		this.paused = false;
 	}
 
 	public boolean canMoveTo(int x, int y) {
@@ -56,8 +67,8 @@ public abstract class Character {
 		if (game.map[y / GameConstant.SQUARE][x / GameConstant.SQUARE] == 1) { // is wall
 			return false;
 		} else { // is not wall but have no way to move
-			List<Node> path = new AStarPathfinding().findPath(game.map, this.y / GameConstant.SQUARE, this.x / GameConstant.SQUARE, y / GameConstant.SQUARE,
-					x / GameConstant.SQUARE);
+			List<Node> path = new AStarPathfinding().findPath(game.map, this.y / GameConstant.SQUARE,
+					this.x / GameConstant.SQUARE, y / GameConstant.SQUARE, x / GameConstant.SQUARE);
 			if (path.isEmpty())
 				return false;
 		}
@@ -97,9 +108,12 @@ public abstract class Character {
 			animationRight = new BufferedImage[numOfSprites];
 			for (int i = 0; i < animationDown.length; i++) {
 				animationDown[i] = image.getSubimage(0, i * spriteHeight + space * i, spriteWidth, spriteHeight);
-				animationUp[i] = image.getSubimage(0, (i + 6) * spriteHeight + space * (i + 6), spriteWidth, spriteHeight);
-				animationRight[i] = image.getSubimage(0, (i + 9) * spriteHeight + space * (i + 9), spriteWidth, spriteHeight);
-				animationLeft[i] = image.getSubimage(0, (i + 3) * spriteHeight + space * (i + 3), spriteWidth, spriteHeight);
+				animationUp[i] = image.getSubimage(0, (i + 6) * spriteHeight + space * (i + 6), spriteWidth,
+						spriteHeight);
+				animationRight[i] = image.getSubimage(0, (i + 9) * spriteHeight + space * (i + 9), spriteWidth,
+						spriteHeight);
+				animationLeft[i] = image.getSubimage(0, (i + 3) * spriteHeight + space * (i + 3), spriteWidth,
+						spriteHeight);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

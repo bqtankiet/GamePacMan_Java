@@ -29,6 +29,14 @@ public class KeyBoardInput extends KeyAdapter {
 		case KeyEvent.VK_LEFT -> {
 			game.pacman.nextDirection = GameConstant.LEFT;
 		}
+		case KeyEvent.VK_SPACE -> {
+			if(game.gamePaused) {
+				System.out.println("TEST");
+				game.continueGame();
+				game.respawnCharacter();
+
+			}
+		}
 		}
 	}
 

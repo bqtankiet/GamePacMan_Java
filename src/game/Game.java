@@ -22,6 +22,8 @@ public class Game {
 	public boolean checker;
 	public boolean isFrightened;
 	public int frightenedStartTime;
+	public Thread gameloop;
+	public boolean gamePaused = false;
 
 	public Game() {
 		initMap();
@@ -119,33 +121,52 @@ public class Game {
 		this.gamePanel = new GamePanel(this);
 		new GameFrame(gamePanel);
 		// Start game loop
-		new Thread(() -> {
-			long nanoSecond = 1_000_000_000;
-			long lastTime = System.nanoTime();
-			long lastCheckFps = System.currentTimeMillis();
-			int fps = 60;
-			double timePerFrame = nanoSecond / fps;
-			double check = 0;
-			int frame = 0;
-			while (true) {
-				long currentTime = System.nanoTime();
-				check = (currentTime - lastTime) / timePerFrame;
-				if (check >= 1) {
-					gamePanel.repaint();
-					check--;
-					lastTime = currentTime;
-					frame++;
+			gameloop = new Thread(() -> {
+				long nanoSecond = 1_000_000_000;
+				long lastTime = System.nanoTime();
+				long lastCheckFps = System.currentTimeMillis();
+				int fps = 60;
+				double timePerFrame = nanoSecond / fps;
+				double check = 0;
+				int frame = 0;
+				while (true) {
+					long currentTime = System.nanoTime();
+					check = (currentTime - lastTime) / timePerFrame;
+					if (check >= 1) {
+						gamePanel.repaint();
+						check--;
+						lastTime = currentTime;
+						frame++;
+					}
+					if (System.currentTimeMillis() - lastCheckFps >= 1000) {
+						lastCheckFps = System.currentTimeMillis();
+						second++;
+						System.out.printf("Time: %d:%02d | FPS: %d \n", second / 60, second % 60, frame);
+						frame = 0;
+					}
 				}
-				if (System.currentTimeMillis() - lastCheckFps >= 1000) {
-					lastCheckFps = System.currentTimeMillis();
-					second++;
-					System.out.printf("Time: %d:%02d | FPS: %d \n", second / 60, second % 60, frame);
-					frame = 0;
-				}
-			}
-		}).run();
+			});
+			gameloop.run();
 	}
 
+	public void pauseGame() {
+		this.pacman.pause();
+		this.redGhost.pause();
+		this.orangeGhost.pause();
+		this.pinkGhost.pause();
+		this.blueGhost.pause();
+		this.gamePaused = true;
+    }
+	
+	public void continueGame() {
+		this.pacman.continue_();
+		this.redGhost.continue_();
+		this.orangeGhost.continue_();
+		this.pinkGhost.continue_();
+		this.blueGhost.continue_();
+		this.gamePaused = false;
+	}
+	
 	public void update() {
 		System.out.println(redGhost.mode);
 		manageGhostMode();
